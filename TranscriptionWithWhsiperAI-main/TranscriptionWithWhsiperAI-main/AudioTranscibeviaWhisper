@@ -1,0 +1,58 @@
+#!!! run the following to install whisper!!!
+#pip install git+https://github.com/openai/whisper.git
+
+import whisper
+import shutil
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from pathlib import Path
+import sys
+
+def check_ffmpeg_installed():
+    return shutil.which("ffmpeg") is not None
+
+def main():
+    # Check FFmpeg availability
+    if not check_ffmpeg_installed():
+        messagebox.showerror(
+            "FFmpeg Not Found",
+            "FFmpeg is required but was not found on your system.\n\n"
+            "Please install it and ensure it is added to your PATH.\n"
+            "Visit: https://ffmpeg.org/download.html"
+        )
+        sys.exit(1)
+
+    # Initialize tkinter root and hide the window
+    root = tk.Tk()
+    root.withdraw()
+
+    # Ask user for audio file
+    file_path = filedialog.askopenfilename(
+        title="Select an audio file",
+        filetypes=[("Audio Files", "*.wav *.mp3 *.m4a *.webm *.ogg *.flac")]
+    )
+
+    if not file_path:
+        messagebox.showinfo("Cancelled", "No file selected.")
+        return
+
+    audio_file = Path(file_path)
+
+    # Load Whisper model
+    messagebox.showinfo("Whisper", "Loading Whisper model (base)... Please wait.")
+    model = whisper.load_model("base")
+
+    # Transcribe
+    messagebox.showinfo("Transcribing", f"Transcribing: {audio_file.name}")
+    result = model.transcribe(str(audio_file))
+    transcript = result["text"]
+
+    # Save to .txt file
+    output_file = audio_file.with_suffix(".txt")
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(transcript)
+
+    messagebox.showinfo("Done", f"Transcription saved to:\n{output_file}")
+
+if __name__ == "__main__":
+    main()
