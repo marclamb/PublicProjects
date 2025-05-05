@@ -3,6 +3,10 @@ import math
 from typing import List, Set
 
 # ───────────────────────────────────────────────────────────────────────────────
+# Based on the equations in "The Periodic Table of Primes" by Han-Lin Li, Shu-Cherng Fang, and Way Kuo 
+# ───────────────────────────────────────────────────────────────────────────────
+
+# ───────────────────────────────────────────────────────────────────────────────
 # 1. WHEEL-ROOTS AND FORMULA OF PRIMES
 # ───────────────────────────────────────────────────────────────────────────────
 def compute_roots() -> List[int]:
